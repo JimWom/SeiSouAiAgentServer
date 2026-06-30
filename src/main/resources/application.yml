@@ -1,0 +1,59 @@
+server:
+  port: 8080
+
+spring:
+  application:
+    name: seisou-ai-agent-server
+  datasource:
+    url: jdbc:h2:mem:seisou_ai_agent;MODE=MySQL;DB_CLOSE_DELAY=-1;DB_CLOSE_ON_EXIT=FALSE
+    username: sa
+    password:
+    driver-class-name: org.h2.Driver
+  h2:
+    console:
+      enabled: true
+      path: /h2-console
+  sql:
+    init:
+      mode: always
+
+mybatis:
+  type-handlers-package: com.seisou.aiagentserver.config.mybatis
+  configuration:
+    map-underscore-to-camel-case: true
+
+app:
+  cors:
+    allowed-origins:
+      - http://localhost:3000
+      - http://localhost:5173
+      - http://127.0.0.1:3000
+      - http://127.0.0.1:5173
+  origin-guard:
+    enabled: true
+  visitor:
+    cookie-name: seisou_visitor
+    # Override this in production with a long random secret.
+    signing-secret: change-me-before-production
+    secure-cookie: false
+    max-age-seconds: 2592000
+  rate-limit:
+    enabled: true
+    visitor-limit: 10
+    ip-limit: 60
+    window-seconds: 60
+    cooldown-seconds: 120
+  usage-quota:
+    enabled: true
+    daily-visitor-limit: 30
+    session-user-message-limit: 50
+  robot-check:
+    enabled: false
+    provider: turnstile
+    turnstile-verify-url: https://challenges.cloudflare.com/turnstile/v0/siteverify
+    turnstile-secret-key:
+  openclaw:
+    base-url:
+    api-key:
+    chat-path: /v1/chat/completions
+    model: seisou-agent
